@@ -131,6 +131,7 @@ def convertNumberToGrade(number):
 def getAverageForClass(className):
     jsonfile = open("./data/averages.json")
     classes = json.load(jsonfile)
+    jsonfile.close()
     processedName = className.upper().replace("-","")
     grades = []
     for term in classes[processedName]:
