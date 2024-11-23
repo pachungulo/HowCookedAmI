@@ -1,4 +1,5 @@
 import requests
+import json
 from bs4 import BeautifulSoup
 import re
 
@@ -81,5 +82,69 @@ def getProfInfo(legacyId):
 
     return infoList
 
+def convertGradeToNumber(grade):
+    if grade == "A":
+        return 0
+    elif grade == "A-":
+        return 1
+    elif grade == "B+":
+        return 2
+    elif grade == "B":
+        return 3
+    elif grade == "B-":
+        return 4
+    elif grade == "C+":
+        return 5
+    elif grade == "C":
+        return 6
+    elif grade == "D":
+        return 7
+    elif grade == "F":
+        return 8
+    else:
+        raise ValueError("Invalid grade entered")
+
+def convertNumberToGrade(number):
+    number = round(number)
+    if number == 0:
+        return "A"
+    elif number == 1:
+        return "A-"
+    elif number == 2:
+        return "B+"
+    elif number == 3:
+        return "B"
+    elif number == 4:
+        return "B-"
+    elif number == 5:
+        return "C+"
+    elif number == 6:
+        return "C"
+    elif number == 7:
+        return "D"
+    elif number == 8:
+        return "F"
+    else:
+        raise ValueError("Invalid number entered")
 
 
+def getAverageForClass(className):
+    jsonfile = open("./data/averages.json")
+    classes = json.load(jsonfile)
+    processedName = className.upper().replace("-","")
+    grades = []
+    for term in classes[processedName]:
+        grades.append(term["average"])
+
+    grades = grades[-5:]
+
+    for i, grade in enumerate(grades):
+        grades[i] = convertGradeToNumber(grade)
+
+    average = sum(grades)/len(grades)
+    lettergrade = convertNumberToGrade(average)
+    
+    return lettergrade, average
+
+if __name__ == "__main__":
+    print(getAverageForClass("ecse-324"))
