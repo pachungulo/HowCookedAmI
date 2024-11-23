@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("input.html")
 
 @app.route('/result', methods=["POST", "GET"])
 def submit():
@@ -15,6 +15,6 @@ def submit():
     else:
         return render_template("input.html")
 
-@app.route('/submit/<classes>')
-def submit(classes):
-    return render_template("submit.html", classes=classes)
+# @app.route('/submit/<classes>')
+# def submit(classes):
+#     return render_template("submit.html", classes=classes)
