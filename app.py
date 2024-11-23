@@ -2,8 +2,12 @@ from flask import Flask, render_template, url_for, request, redirect
 
 app = Flask(__name__)
 
-@app.route('/', methods=["POST", "GET"])
+@app.route('/')
 def index():
+    return render_template("index.html")
+
+@app.route('/result', methods=["POST", "GET"])
+def submit():
     if request.method == "POST":
         classes = request.form["classes"]
         return redirect(url_for('submit', classes=classes))

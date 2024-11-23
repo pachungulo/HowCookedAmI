@@ -6,10 +6,8 @@
     <title>FlaskBlog</title>
 </head>
 <body>
-  {% if classes=="ecse324" %}
-     <h1> Your result is pass!</h1>
-  {% else %}
-     <h1>Your result is fail</h1>
-  {% endif %}
+    {% for class in classes %}
+        <p>{{class}}</p>
+    {% endfor %}
 </body>
 </html>

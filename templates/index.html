@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
-    <title>FlaskBlog</title>
+    <title>ClassDIFF</title>
 </head>
 <body>
-   <h1>Welcome to FlaskBlog</h1>
-  <form action = "http://localhost:5000/" method = "post">
-     <p>Enter Classes:</p>
-     <p><input type = "text" name = "classes" /></p>
-     <p><input type = "submit" value = "submit" /></p>
-  </form>
+    <h1>Welcome to ClassDIFF!</h1>
+    <form action = "http://localhost:5000/result" method = "post">
+        <p>Enter the classes you're taking here:</p>
+        <p><input type = "text" name = "classes" /></p>
+        <p><input type = "submit" value = "Submit" /></p>
+    </form>
 </body>
 </html>
