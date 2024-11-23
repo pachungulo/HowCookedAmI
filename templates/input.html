@@ -6,10 +6,10 @@
     <div class="container d-flex justify-content-center align-items-center">
         <div>
             <h1 class="text-center mt-5 mb-4">Let's see if you getting fcked this semester</h1>
-            <form style="margin-top: 20%;">
+            <form method="POST" action="{{ url_for('submit') }}" style="margin-top: 20%;">
                 <div class="form-group text-center">
                     <label for="coursesInput" class="d-block">Course Codes</label>
-                    <input type="text" class="form-control mx-auto" id="coursesInput" placeholder="eg. ECSE 324, ECSE 551, ..." style="max-width: 300px;">
+                    <input type="text" class="form-control mx-auto" id="coursesInput" name="coursesInput" placeholder="eg. ECSE 324, ECSE 551, ..." style="max-width: 300px;">
                     <small id="coursesInput" class="form-text text-muted">Input the course code of classes you intend to take (separate by comma)</small>
                 </div>
                 <div class="text-center mt-3">
