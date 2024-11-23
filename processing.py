@@ -144,8 +144,15 @@ def getAverageForClass(className):
 
     average = sum(grades)/len(grades)
     lettergrade = convertNumberToGrade(average)
-    
     return lettergrade, average
 
+
+def getCreditsForClass(className):
+    jsonfile = open("./data/averages.json")
+    classes = json.load(jsonfile)
+    jsonfile.close()
+    processedName = className.upper().replace("-","")
+    return classes[processedName][-1]["credits"]
+
 if __name__ == "__main__":
-    print(getAverageForClass("ecse-324"))
+    print(getAverageForClass("ecse-324"), getCreditsForClass("ecse-324"))
