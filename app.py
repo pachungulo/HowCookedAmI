@@ -9,7 +9,7 @@ def index():
         return redirect(url_for('submit', classes=classes))
 
     else:
-        return render_template("index.html")
+        return render_template("input.html")
 
 @app.route('/submit/<classes>')
 def submit(classes):
