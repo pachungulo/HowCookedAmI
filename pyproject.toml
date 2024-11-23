@@ -5,7 +5,9 @@ description = "Backend for the codejam project!"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+    "bs4>=0.0.2",
     "flask>=3.1.0",
+    "requests>=2.32.3",
 ]
 
 [tool.basedpyright]
