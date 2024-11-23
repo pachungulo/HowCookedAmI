@@ -1,0 +1,9 @@
+[project]
+name = "codejam14"
+version = "0.1.0"
+description = "Backend for the codejam project!"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "flask>=3.1.0",
+]
