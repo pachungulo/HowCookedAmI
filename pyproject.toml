@@ -7,3 +7,6 @@ requires-python = ">=3.9"
 dependencies = [
     "flask>=3.1.0",
 ]
+
+[tool.basedpyright]
+typeCheckingMode = "off"
