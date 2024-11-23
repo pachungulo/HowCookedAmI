@@ -10,10 +10,11 @@ def index():
 def submit():
     if request.method == "POST":
         classes = request.form["classes"]
-        return redirect(url_for('submit', classes=classes))
+        classes = classes.split(",")
+        return render_template('submit.html', classes=classes)
 
     else:
-        return render_template("input.html")
+        return redirect(url_for("index"))
 
 # @app.route('/submit/<classes>')
 # def submit(classes):
