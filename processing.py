@@ -250,6 +250,8 @@ def getClassDifficulty(course, season):
         for prof in profList:
             infoList = getProfInfo(getProfId(prof))
             count = len(infoList)
+            if count == 0:
+                count = 1
             for infoDict in infoList:
                 if infoDict.get("course") == course:
                     classDifficulty += infoDict.get("difficulty")
@@ -268,6 +270,8 @@ def getProfRating(course, season):
         for prof in profList:
             infoList = getProfInfo(getProfId(prof))
             count = len(infoList)
+            if count == 0:
+                count = 1
             for infoDict in infoList:
                 if infoDict.get("course") == course:
                     profRating += infoDict.get("quality")
