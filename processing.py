@@ -1,3 +1,4 @@
+from functools import lru_cache
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -237,6 +238,7 @@ def getListOfClasses(userInput):
         classes[i] = classes[i].strip().lower().replace(" ", "-")
     return classes
 
+@lru_cache
 def getClassDifficulty(course, season):
 
     classDifficulty = 0
@@ -257,6 +259,7 @@ def getClassDifficulty(course, season):
                     classDifficulty += infoDict.get("difficulty")
     return classDifficulty/count
 
+@lru_cache
 def getProfRating(course, season):
 
     profRating = 0
