@@ -8,7 +8,6 @@ import re
 def getProf(courseCode, season):
 
     season = season.strip().lower().capitalize()
-    courseCode = courseCode.lower().replace(" ", "-")
 
     URL = "https://www.mcgill.ca/study/2024-2025/courses/" + courseCode
     page = requests.get(URL)
@@ -234,7 +233,7 @@ def getSemesterRating(classRating, totalCredits):
 def getListOfClasses(userInput):
     classes = userInput.split(",")
     for i in range(len(classes)):
-        classes[i] = classes[i].strip()
+        classes[i] = classes[i].strip().lower().replace(" ", "-")
     return classes
 
 

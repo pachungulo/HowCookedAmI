@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect
+import processing
 
 app = Flask(__name__)
 
@@ -10,7 +11,18 @@ def index():
 def submit():
     if request.method == 'POST':
         
-        courses = request.form['coursesInput']
+        # userInput = request.form['coursesInput']
+        # userInput = processing.getListOfClasses(userInput)
+        # courses = []
+        # for course in userInput:
+        #     prof = processing.getProf(course, "Winter")  # To make dynamic later
+        #     profinfo = processing.getProfInfo(processing.getProfId(prof))
+        #     dict = {
+        #         "code": userInput.upper().replace("-", " "),
+        #         "professor": prof,
+        #         "overallDifficulty":   # TODO
+        #         "comments": # TODO
+        #     }
         courses = [{
             "code": "ECSE 324",
             "professor": "Dubach",
