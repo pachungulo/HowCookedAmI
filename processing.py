@@ -5,9 +5,10 @@ from bs4 import BeautifulSoup
 import re
 from gpt import summarize
 
-# ex: getProf("ecse-324")
-def getProf(courseCode, season):
 
+# ex: getProf("ecse-324")
+@lru_cache
+def getProf(courseCode, season):
     season = season.strip().lower().capitalize()
 
     URL = "https://www.mcgill.ca/study/2024-2025/courses/" + courseCode
@@ -29,6 +30,7 @@ def getProf(courseCode, season):
     return instructorDict[season]
 
 
+@lru_cache
 def getProfId(name):
     URL = "https://www.ratemyprofessors.com/search/professors/1439?q=" + name
     page = requests.get(URL)
@@ -42,6 +44,7 @@ def getProfId(name):
 
 
 # Returns a list of dict including class, quality rating, difficulty rating, comment
+@lru_cache
 def getProfInfo(legacyId):
     infoList = []
 
@@ -83,6 +86,7 @@ def getProfInfo(legacyId):
 
     return infoList
 
+
 def convertGradeToNumber(grade):
     if grade == "A":
         return 0
@@ -104,6 +108,7 @@ def convertGradeToNumber(grade):
         return 8
     else:
         raise ValueError("Invalid grade entered")
+
 
 def convertNumberToGrade(number):
     number = round(number)
@@ -128,8 +133,8 @@ def convertNumberToGrade(number):
     else:
         raise ValueError("Invalid number entered")
 
-def getComments(listOfClasses, semester):
 
+def getComments(listOfClasses, semester):
     toReturn = []
 
     for aClass in listOfClasses:
@@ -151,11 +156,12 @@ def getComments(listOfClasses, semester):
 
     return toReturn
 
+
 def getAverageForClass(className):
     jsonfile = open("./data/averages.json")
     classes = json.load(jsonfile)
     jsonfile.close()
-    processedName = className.upper().replace("-","")
+    processedName = className.upper().replace("-", "")
     grades = []
     for term in classes[processedName]:
         grades.append(term["average"])
@@ -166,7 +172,7 @@ def getAverageForClass(className):
     for i, grade in enumerate(grades):
         grades[i] = convertGradeToNumber(grade)
 
-    average = sum(grades)/len(grades)
+    average = sum(grades) / len(grades)
     lettergrade = convertNumberToGrade(average)
     return lettergrade, average
 
@@ -175,20 +181,17 @@ def getCreditsForClass(className):
     jsonfile = open("./data/averages.json")
     classes = json.load(jsonfile)
     jsonfile.close()
-    processedName = className.upper().replace("-","")
+    processedName = className.upper().replace("-", "")
     return classes[processedName][-1]["credits"]
-
 
 
 # The higher the rating, the harder the class
 def getClassRating(credit, pastAverage, classDifficulty, profRating):
-
     classRating = 0
 
-
-    if pastAverage == "A": # A
+    if pastAverage == "A":  # A
         classRating += 0
-    elif pastAverage == "A-": # A-
+    elif pastAverage == "A-":  # A-
         classRating += 10
     elif pastAverage == "B+":  # B+
         classRating += 20
@@ -201,9 +204,9 @@ def getClassRating(credit, pastAverage, classDifficulty, profRating):
     else:
         classRating += 50
 
-    classRating += (classDifficulty/6)*25
+    classRating += (classDifficulty / 6) * 25
 
-    classRating += ((6-profRating)/6)*25
+    classRating += ((6 - profRating) / 6) * 25
 
     if credit == 1:
         classRating *= 0.4
@@ -215,11 +218,9 @@ def getClassRating(credit, pastAverage, classDifficulty, profRating):
     return classRating
 
 
-
 # The higher the rating, the harder the semester, average is 1
 def getSemesterRating(classRating, totalCredits):
-
-    maxRating = 50*5
+    maxRating = 50 * 5
 
     semesterRating = 0
 
@@ -232,15 +233,15 @@ def getSemesterRating(classRating, totalCredits):
 
     return semesterRating
 
+
 def getListOfClasses(userInput):
     classes = userInput.split(",")
     for i in range(len(classes)):
         classes[i] = classes[i].strip().lower().replace(" ", "-")
     return classes
 
-@lru_cache
-def getClassDifficulty(course, season):
 
+def getClassDifficulty(course, season):
     classDifficulty = 0
     count = 1
 
@@ -257,11 +258,10 @@ def getClassDifficulty(course, season):
             for infoDict in infoList:
                 if infoDict.get("course") == course:
                     classDifficulty += infoDict.get("difficulty")
-    return classDifficulty/count
+    return classDifficulty / count
 
-@lru_cache
+
 def getProfRating(course, season):
-
     profRating = 0
     count = 1
 
@@ -278,7 +278,8 @@ def getProfRating(course, season):
             for infoDict in infoList:
                 if infoDict.get("course") == course:
                     profRating += infoDict.get("quality")
-    return profRating/count
+    return profRating / count
+
 
 def passCourseRating(course, selected_semester):
     return getClassRating(getCreditsForClass(course),
@@ -286,15 +287,21 @@ def passCourseRating(course, selected_semester):
                           getClassDifficulty(course, selected_semester),
                           getProfRating(course, selected_semester))
 
-def passSemesterRating(courseRatings, userInput):
 
+def passSemesterRating(userInput, selected_semester):
     totalCredit = 0
     classRatings = []
+
     for course in userInput:
         classRatings.append(getClassRating())
         totalCredit += getCreditsForClass(course)
+        classRating = getClassRating(getCreditsForClass(course),
+                                     getAverageForClass(course)[0],
+                                     getClassDifficulty(course, selected_semester),
+                                     getProfRating(course, selected_semester))
+        classRatings.append(classRating)
 
-    return getSemesterRating(courseRatings, totalCredit)
+    return getSemesterRating(classRatings, totalCredit)
 
 
 def processUserInput(userInput, selected_semester):
@@ -310,7 +317,7 @@ def processUserInput(userInput, selected_semester):
             "overallDifficulty": passCourseRating(course, selected_semester),
             "comments": "TODO"
         }
-        
+
         courses.append(tmp)
     return courses
 
