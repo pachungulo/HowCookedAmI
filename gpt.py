@@ -2,11 +2,13 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 
+
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 def summarize(originalComments):
 
-    load_dotenv()
-    #openai.api_key =os.getenv("OPENAI_API_KEY")
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    
     summarizedComments = []
 
 
@@ -42,4 +44,23 @@ def summarize(originalComments):
     print(summarizedComments)
 
 
+def generateImage(difficulty):
+    if difficulty<40:
+        message = "Generate an image of a university student that is relaxing on the beach with a drink and enjoying the sun and waves."
+    elif difficulty<75:
+        message = "Generate an image of a university student who is putting effort to study and do well in classes. The student is not particularly stressed but is not particularly relaxed."
+    else:
+        message = "Generate an image of a university student that is going crazy because of the large amount of workload. The student is crying, losing hair and has acne."
+    response = client.images.generate(
+        model="dall-e-3",
+        prompt=message,
+        size="1024x1024",
+        quality="standard",
+        n=1,
+        )
+
+    image_url = response.data[0].url
+    print(image_url)
+    return image_url
+#generateImage(5)
 #summarize([["the teacher is trash", "the teacher is great"]])
