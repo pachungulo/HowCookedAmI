@@ -159,7 +159,8 @@ def getAverageForClass(className):
     for term in classes[processedName]:
         grades.append(term["average"])
 
-    grades = grades[-5:]
+    if len(grades) > 5:
+        grades = grades[-5:]
 
     for i, grade in enumerate(grades):
         grades[i] = convertGradeToNumber(grade)
@@ -184,17 +185,17 @@ def getClassRating(credit, pastAverage, classDifficulty, profRating):
     classRating = 0
 
 
-    if pastAverage == 0: # A
+    if pastAverage == "A": # A
         classRating += 0
-    elif pastAverage == 1: # A-
+    elif pastAverage == "A-": # A-
         classRating += 10
-    elif pastAverage == 2:  # B+
+    elif pastAverage == "B+":  # B+
         classRating += 20
-    elif pastAverage == 3:  # B
+    elif pastAverage == "B":  # B
         classRating += 25
-    elif pastAverage == 4:  # B-
+    elif pastAverage == "B-":  # B-
         classRating += 35
-    elif pastAverage == 4:  # C+
+    elif pastAverage == "C+":  # C+
         classRating += 45
     else:
         classRating += 50
@@ -211,6 +212,8 @@ def getClassRating(credit, pastAverage, classDifficulty, profRating):
         classRating *= 1.2
 
     return classRating
+
+
 
 # The higher the rating, the harder the semester, average is 1
 def getSemesterRating(classRating, totalCredits):
@@ -234,6 +237,65 @@ def getListOfClasses(userInput):
         classes[i] = classes[i].strip().lower().replace(" ", "-")
     return classes
 
+def getClassDifficulty(course, season):
+
+    classDifficulty = 0
+    count = 1
+
+    profList = getProf(course, season)
+
+    course = course.upper().replace("-", "")
+
+    if len(profList) >= 1:
+        for prof in profList:
+            infoList = getProfInfo(getProfId(prof))
+            count = len(infoList)
+            for infoDict in infoList:
+                if infoDict.get("course") == course:
+                    classDifficulty += infoDict.get("difficulty")
+    return classDifficulty/count
+
+def getProfRating(course, season):
+
+    profRating = 0
+    count = 1
+
+    profList = getProf(course, season)
+
+    course = course.upper().replace("-", "")
+
+    if len(profList) >= 1:
+        for prof in profList:
+            infoList = getProfInfo(getProfId(prof))
+            count = len(infoList)
+            for infoDict in infoList:
+                if infoDict.get("course") == course:
+                    profRating += infoDict.get("quality")
+    return profRating/count
+
+def getOverallDifficulty(course, selected_semester):
+    return getClassRating(getCreditsForClass(course),
+                          getAverageForClass(course)[0],
+                          getClassDifficulty(course, selected_semester),
+                          getProfRating(course, selected_semester))
+
+def processUserInput(userInput, selected_semester):
+    courses = []
+    # comments = getComments(userInput)   # I think we need to summarize? dunno. LEL
+    for i, course in enumerate(userInput):
+        prof = getProf(course, selected_semester)  # To make dynamic later
+        if not prof:
+            prof = ['N/A']
+        profinfo = getProfInfo(getProfId(prof[0]))
+        tmp = {
+            "code": course.upper().replace("-", " "),
+            "professor": prof,
+            "overallDifficulty": getOverallDifficulty(course, selected_semester),
+            "comments": "TODO"
+        }
+        
+        courses.append(tmp)
+    return courses
 
 
 if __name__ == "__main__":
