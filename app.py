@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect
-import processing
+import processing, gpt
 
 app = Flask(__name__)
 
@@ -12,8 +12,15 @@ def submit():
     if request.method == 'POST':
         userInput = request.form['coursesInput']
         selected_semester = request.form.get('semester') #fall or winter
-        userInput = processing.getListOfClasses(userInput)
-        courses = processing.processUserInput(userInput, selected_semester)
+        #userInput = processing.getListOfClasses(userInput)
+        #courses = processing.processUserInput(userInput, selected_semester)
+        coursesSummary = processing.outputClasses(userInput, selected_semester)
+        imgLink = gpt.generateImage(processing.passSemesterRating(userInput, selected_semester))
+        if imgLink[-1]=="/":
+            imgLink=imgLink[:-1]
+        
+        print(coursesSummary)
+        print(imgLink)
         # courses = [{
         #     "code": "ECSE 324",
         #     "professor": "Dubach",
@@ -21,7 +28,7 @@ def submit():
         #     "comments": "These are the comments"
         #     }]
         # Process the courses data as needed
-        return render_template("summary.html", courses=courses)
+        return render_template("summary.html", courses=coursesSummary, image = imgLink)
     # if request.method == "POST":
     #     classes = request.form["classes"]
     #     classes = classes.split(",")

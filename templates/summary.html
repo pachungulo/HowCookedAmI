@@ -6,12 +6,13 @@
     <div class="container text-center mt-5">
         <h1>Summary</h1>
         {% if courses %}
-            
+            <img src={{image}}/>
                 {% for course in courses %}
                     <div class="card">
                         <h5 class="card-header">{{course.code}} - {{course.professor}}</h5>
                         <div class="card-body">
-                          <h5 class="card-title">Difficulty: {{course.overallDifficulty}}</h5>
+                          <h5 class="card-title">Previous average: {{course.overallDifficulty}}</h5>
+                          <h5 class="card-title">Class Difficulty Index: {{course.classRating}}</h5>
                           <p class="card-text">{{course.comments}} </p>
                         </div>
                       </div>

@@ -42,6 +42,7 @@ def summarize(originalComments):
             #print(completion.choices[0].message)
 
     print(summarizedComments)
+    return summarizedComments
 
 
 def generateImage(difficulty):

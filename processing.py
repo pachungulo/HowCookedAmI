@@ -192,6 +192,7 @@ def classesValidation(userInput):
     classes = json.load(jsonfile)
     jsonfile.close()
     enteredCourses = []
+    print(userInput)
     for course in userInput:
         processedName = course.upper().replace("-", "").replace(" ", "")
         try:
@@ -201,7 +202,7 @@ def classesValidation(userInput):
         if course in enteredCourses:
             return course + " is a duplicated course"
         enteredCourses.append(course)
-
+    return ""
 
 
 # The higher the rating, the harder the class
@@ -253,11 +254,18 @@ def getSemesterRating(classRating, totalCredits):
     return semesterRating
 
 
-def getListOfClasses(userInput):
-    classes = userInput.split(",")
-    for i in range(len(classes)):
-        classes[i] = classes[i].strip().lower().replace(" ", "-")
-    return classes
+def getListOfClasses(classes):
+    #print(userInput)
+    print(type(classes))
+    print(classes)
+    classes = classes.split(",")
+    print(classes)
+    output =[]
+    for i in range(len(classes)):   
+        print(classes[i].strip().lower().replace(" ", "-"))
+
+        output.append(classes[i].strip().lower().replace(" ", "-"))
+    return output
 
 
 def getClassDifficulty(course, season):
@@ -308,6 +316,8 @@ def passCourseRating(course, selected_semester):
 
 
 def passSemesterRating(userInput, selected_semester):
+    userInput = getListOfClasses(userInput)
+
     totalCredit = 0
     classRatings = []
 
@@ -338,6 +348,40 @@ def processUserInput(userInput, selected_semester):
 
         courses.append(tmp)
     return courses
+
+
+def outputClasses(courses, semester):
+    courses = getListOfClasses(courses)
+    #print(courses)
+    error = classesValidation(courses)
+    if classesValidation(courses)!="":
+        return error
+    print("REACHED")
+    outputList = []
+    classRatingList = []
+    profList = []
+    avgList = []
+    for course in courses:
+        classRatingList.append(passCourseRating(course, semester))
+        profList.append(getProf(course, semester))
+        avgList.append(getAverageForClass(course)[0])
+    
+    generatedComments = summarize(getComments(courses, semester))
+    
+    for i in range(len(generatedComments)):
+        print(profList[i])
+        professorList = ", ".join(profList[i])
+        singleClass = {
+            "code": courses[i],
+            "professor": professorList,
+            "overallDifficulty": avgList[i],
+            "classRating": int(classRatingList[i]),
+            "comments": generatedComments[i]
+        }
+        outputList.append(singleClass)
+    return outputList
+
+
 
 
 if __name__ == "__main__":
