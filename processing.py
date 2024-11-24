@@ -154,5 +154,65 @@ def getCreditsForClass(className):
     processedName = className.upper().replace("-","")
     return classes[processedName][-1]["credits"]
 
+
+
+# Tingyi's Code
+
+# The higher the rating, the harder the class
+def getClassRating(credit, pastAverage, classDifficulty, profRating):
+
+    classRating = 0
+
+    if credit == 1:
+        classRating += 10
+    elif credit == 3:
+        classRating += 35
+    elif credit == 4:
+        classRating += 40
+
+    if pastAverage == 0: # A
+        classRating += 10
+    elif pastAverage == 1: # A-
+        classRating += 20
+    elif pastAverage == 2:
+        classRating += 30
+    elif pastAverage == 3:
+        classRating += 32
+    else:
+        classRating += 35
+
+    classRating += (classDifficulty/5)*15
+
+    classRating += ((10-profRating)/10)*10
+
+    return classRating
+
+# The higher the rating, the harder the semester, average is 1
+def getSemesterRating(classRating, totalCredits):
+
+    maxRating = 80*5
+
+    semesterRating = 0
+
+    for rating in classRating:
+        semesterRating += rating
+
+    multiplier = 1 + 0.06 * (totalCredits - totalCredits % 3 - 15) + 0.01 * (totalCredits % 3)
+    semesterRating *= multiplier
+
+    semesterRating /= maxRating
+
+    return semesterRating
+
+def getListOfClasses(userInput):
+    classes = userInput.split(",")
+    for i in range(len(classes)):
+        classes[i] = classes[i].strip()
+    return classes
+
+
+#Ends here
+
+
 if __name__ == "__main__":
     print(getAverageForClass("ecse-324"), getCreditsForClass("ecse-324"))
