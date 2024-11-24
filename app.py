@@ -19,6 +19,13 @@ def submit():
             }]
         # Process the courses data as needed
         return render_template("summary.html", courses=courses)
+    # if request.method == "POST":
+    #     classes = request.form["classes"]
+    #     classes = classes.split(",")
+    #     return render_template('submit.html', classes=classes)
+
+    else:
+        return redirect(url_for("index"))
 
 @app.errorhandler(404)
 def page_not_found(e):
