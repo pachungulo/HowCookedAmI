@@ -28,7 +28,7 @@ def submit():
             "code": "ECSE 324",
             "professor": "Dubach",
             "overallDifficulty": 80,
-            "comments": "These are the comments"
+            "comments": "Students generally express a high appreciation for Professor Chen's teaching style and effectiveness in conveying course material. Many comments highlight the clarity of his lectures, helpful examples, and engaging flipped classroom approach, which they find more beneficial than traditional methods, despite requiring more effort and preparation. While some students feel overwhelmed by the workload and the difficulty of assignments and exams, they acknowledge that his teaching methods ultimately enhance understanding and retention of the material. Overall, students recommend taking his courses, praising his responsiveness and supportiveness."
             }]
         # Process the courses data as needed
         return render_template("summary.html", courses=courses)

@@ -2,7 +2,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import re
-
+from gpt import summarize
 
 # ex: getProf("ecse-324")
 def getProf(courseCode, season):
@@ -145,8 +145,6 @@ def getComments(listOfClasses, semester):
                 for infoDict in infoList:
                     if infoDict.get("course") == aClass:
                         commentList.append(infoDict.get("comment"))
-        else:
-            commentList.append("There is no comment on this prof for this course.")
 
         toReturn.append(commentList)
 
@@ -239,10 +237,10 @@ def getListOfClasses(userInput):
 
 
 if __name__ == "__main__":
-    avg = getClassRating(3, 3, 3, 3)
-    class1 = getClassRating(4, 3, 3, 3)
-    class2 = getClassRating(1, 1, 2, 4)
+    # avg = getClassRating(3, 3, 3, 3)
+    # class1 = getClassRating(4, 3, 3, 3)
+    # class2 = getClassRating(1, 1, 2, 4)
     # print(class2)
-    print(getSemesterRating([50,50,50,50, 20],13))
+    # print(getSemesterRating([50,50,50,50, 20],13))
     # print(getSemesterRating([class1,avg,avg,avg,avg, class2],16))
-    print(getComments(["ecse-324", "ecse-325", "ecse-206", "ecse-250"], "Fall"))
+    print(summarize(getComments(["ecse-324", "ecse-325", "ecse-206", "ecse-250"], "Fall")))
