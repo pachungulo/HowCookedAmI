@@ -15,7 +15,8 @@ def submit():
         #userInput = processing.getListOfClasses(userInput)
         #courses = processing.processUserInput(userInput, selected_semester)
         coursesSummary = processing.outputClasses(userInput, selected_semester)
-        imgLink = gpt.generateImage(processing.passSemesterRating(userInput, selected_semester))
+        overallRating = int(processing.passSemesterRating(userInput, selected_semester) * 50)
+        imgLink = gpt.generateImage(overallRating)
         if imgLink[-1]=="/":
             imgLink=imgLink[:-1]
         
@@ -28,7 +29,7 @@ def submit():
         #     "comments": "These are the comments"
         #     }]
         # Process the courses data as needed
-        return render_template("summary.html", courses=coursesSummary, image = imgLink)
+        return render_template("summary.html", courses=coursesSummary, image = imgLink, overall = overallRating)
     # if request.method == "POST":
     #     classes = request.form["classes"]
     #     classes = classes.split(",")

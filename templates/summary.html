@@ -6,7 +6,10 @@
     <div class="container text-center mt-5">
         <h1>Summary</h1>
         {% if courses %}
-            <img src={{image}}/>
+            <h3>The overall difficulty index of your semester is {{overall}}</h3>
+            <small>below 40 is easy. between is 40 and 60 you will manage. over 60 you will suffer.</small>
+            <br/>
+            <img class="mt-5 mb-5" src="{{image}}" style="width: 30%; height: auto;"/>
                 {% for course in courses %}
                     <div class="card">
                         <h5 class="card-header">{{course.code}} - {{course.professor}}</h5>

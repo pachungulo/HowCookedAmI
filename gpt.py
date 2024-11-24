@@ -48,7 +48,7 @@ def summarize(originalComments):
 def generateImage(difficulty):
     if difficulty<40:
         message = "Generate an image of a university student that is relaxing on the beach with a drink and enjoying the sun and waves."
-    elif difficulty<75:
+    elif difficulty<60:
         message = "Generate an image of a university student who is putting effort to study and do well in classes. The student is not particularly stressed but is not particularly relaxed."
     else:
         message = "Generate an image of a university student that is going crazy because of the large amount of workload. The student is crying, losing hair and has acne."
