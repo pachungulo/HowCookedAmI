@@ -161,7 +161,8 @@ def getAverageForClass(className):
     for term in classes[processedName]:
         grades.append(term["average"])
 
-    grades = grades[-5:]
+    if len(grades) > 5:
+        grades = grades[-5:]
 
     for i, grade in enumerate(grades):
         grades[i] = convertGradeToNumber(grade)
@@ -186,17 +187,17 @@ def getClassRating(credit, pastAverage, classDifficulty, profRating):
     classRating = 0
 
 
-    if pastAverage == 0: # A
+    if pastAverage == "A": # A
         classRating += 0
-    elif pastAverage == 1: # A-
+    elif pastAverage == "A-": # A-
         classRating += 10
-    elif pastAverage == 2:  # B+
+    elif pastAverage == "B+":  # B+
         classRating += 20
-    elif pastAverage == 3:  # B
+    elif pastAverage == "B":  # B
         classRating += 25
-    elif pastAverage == 4:  # B-
+    elif pastAverage == "B-":  # B-
         classRating += 35
-    elif pastAverage == 4:  # C+
+    elif pastAverage == "C+":  # C+
         classRating += 45
     else:
         classRating += 50
@@ -213,6 +214,8 @@ def getClassRating(credit, pastAverage, classDifficulty, profRating):
         classRating *= 1.2
 
     return classRating
+
+
 
 # The higher the rating, the harder the semester, average is 1
 def getSemesterRating(classRating, totalCredits):
@@ -236,13 +239,28 @@ def getListOfClasses(userInput):
         classes[i] = classes[i].strip().lower().replace(" ", "-")
     return classes
 
+def getOverallDifficulty(course, profinfo):
+    return getClassRating(getCreditsForClass(course), getAverageForClass(course)[0],3.0, 3.0)  # NEED TO IMPLEMENT LAST 2 ARGS SOON TODO
+
+def processUserInput(userInput):
+    courses = []
+    # comments = getComments(userInput)   # I think we need to summarize? dunno. LEL
+    for i, course in enumerate(userInput):
+        prof = getProf(course, "Winter")  # To make dynamic later
+        if not prof:
+            prof = ['N/A']
+        profinfo = getProfInfo(getProfId(prof[0]))
+        tmp = {
+            "code": course.upper().replace("-", " "),
+            "professor": prof,
+            "overallDifficulty": getOverallDifficulty(course, profinfo),
+            "comments": "TODO"
+        }
+        
+        courses.append(tmp)
+    return courses
 
 
 if __name__ == "__main__":
-    avg = getClassRating(3, 3, 3, 3)
-    class1 = getClassRating(4, 3, 3, 3)
-    class2 = getClassRating(1, 1, 2, 4)
-    # print(class2)
-    print(getSemesterRating([50,50,50,50, 20],13))
-    # print(getSemesterRating([class1,avg,avg,avg,avg, class2],16))
-    print(getComments(["ecse-324", "ecse-325", "ecse-206", "ecse-250"], "Fall"))
+    print(getAverageForClass("ecse-324"))
+    print(getAverageForClass("facc-100"))
