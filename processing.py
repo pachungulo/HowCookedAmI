@@ -181,8 +181,27 @@ def getCreditsForClass(className):
     jsonfile = open("./data/averages.json")
     classes = json.load(jsonfile)
     jsonfile.close()
-    processedName = className.upper().replace("-", "")
-    return classes[processedName][-1]["credits"]
+    processedName = className.upper().replace("-", "").replace(" ", "")
+    try:
+        return classes[processedName][-1]["credits"]
+    except Exception as e:
+        return 0
+
+def classesValidation(userInput):
+    jsonfile = open("./data/averages.json")
+    classes = json.load(jsonfile)
+    jsonfile.close()
+    enteredCourses = []
+    for course in userInput:
+        processedName = course.upper().replace("-", "").replace(" ", "")
+        try:
+            classes[processedName][-1]["credits"]
+        except Exception as e:
+            return course + " is not a valid course"
+        if course in enteredCourses:
+            return course + " is a duplicated course"
+        enteredCourses.append(course)
+
 
 
 # The higher the rating, the harder the class
@@ -257,7 +276,7 @@ def getClassDifficulty(course, season):
                 count = 1
             for infoDict in infoList:
                 if infoDict.get("course") == course:
-                    classDifficulty += infoDict.get("difficulty")
+                    classDifficulty += float(infoDict.get("difficulty"))
     return classDifficulty / count
 
 
@@ -277,7 +296,7 @@ def getProfRating(course, season):
                 count = 1
             for infoDict in infoList:
                 if infoDict.get("course") == course:
-                    profRating += infoDict.get("quality")
+                    profRating += float(infoDict.get("quality"))
     return profRating / count
 
 
@@ -293,8 +312,7 @@ def passSemesterRating(userInput, selected_semester):
     classRatings = []
 
     for course in userInput:
-        classRatings.append(getClassRating())
-        totalCredit += getCreditsForClass(course)
+        totalCredit += float(getCreditsForClass(course))
         classRating = getClassRating(getCreditsForClass(course),
                                      getAverageForClass(course)[0],
                                      getClassDifficulty(course, selected_semester),
@@ -329,4 +347,7 @@ if __name__ == "__main__":
     # print(class2)
     # print(getSemesterRating([50,50,50,50, 20],13))
     # print(getSemesterRating([class1,avg,avg,avg,avg, class2],16))
-    print(summarize(getComments(["ecse-324", "ecse-325", "ecse-206", "ecse-250"], "Fall")))
+    #print(summarize(getComments(["ecse-324", "ecse-325", "ecse-206", "ecse-250"], "Fall")))
+    print(passCourseRating("ecse-324", "Winter"))
+    print(passSemesterRating(["ecse-324", "ecse-325", "ecse-222"], "Fall"))
+    print(classesValidation(["ecse-324", "ecse-324", "ecse-325", "ecse-222"]))
