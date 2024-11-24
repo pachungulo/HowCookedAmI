@@ -292,7 +292,7 @@ def processUserInput(userInput, selected_semester):
         tmp = {
             "code": course.upper().replace("-", " "),
             "professor": prof,
-            "overallDifficulty": getOverallDifficulty(course, profinfo),
+            "overallDifficulty": getOverallDifficulty(course, selected_semester),
             "comments": "TODO"
         }
         
