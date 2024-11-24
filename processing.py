@@ -212,21 +212,21 @@ def getClassRating(credit, pastAverage, classDifficulty, profRating):
     if pastAverage == "A":  # A
         classRating += 0
     elif pastAverage == "A-":  # A-
-        classRating += 10
+        classRating += 13
     elif pastAverage == "B+":  # B+
-        classRating += 20
+        classRating += 27.5
     elif pastAverage == "B":  # B
-        classRating += 25
-    elif pastAverage == "B-":  # B-
         classRating += 35
+    elif pastAverage == "B-":  # B-
+        classRating += 42
     elif pastAverage == "C+":  # C+
-        classRating += 45
+        classRating += 47
     else:
-        classRating += 50
+        classRating += 55
 
-    classRating += (classDifficulty / 6) * 25
+    classRating += (classDifficulty / 6) * 35
 
-    classRating += ((6 - profRating) / 6) * 25
+    classRating += ((6 - profRating) / 6) * 10
 
     if credit == 1:
         classRating *= 0.4
