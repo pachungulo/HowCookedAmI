@@ -13,7 +13,7 @@ def submit():
         userInput = request.form['coursesInput']
         selected_semester = request.form.get('semester') #fall or winter
         userInput = processing.getListOfClasses(userInput)
-        courses = processing.processUserInput(userInput)
+        courses = processing.processUserInput(userInput, selected_semester)
         # courses = [{
         #     "code": "ECSE 324",
         #     "professor": "Dubach",

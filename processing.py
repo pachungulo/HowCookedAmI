@@ -281,11 +281,11 @@ def getOverallDifficulty(course, selected_semester):
                           getClassDifficulty(course, selected_semester),
                           getProfRating(course, selected_semester))
 
-def processUserInput(userInput):
+def processUserInput(userInput, selected_semester):
     courses = []
     # comments = getComments(userInput)   # I think we need to summarize? dunno. LEL
     for i, course in enumerate(userInput):
-        prof = getProf(course, "Winter")  # To make dynamic later
+        prof = getProf(course, selected_semester)  # To make dynamic later
         if not prof:
             prof = ['N/A']
         profinfo = getProfInfo(getProfId(prof[0]))
