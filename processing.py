@@ -6,6 +6,7 @@ import re
 
 # ex: getProf("ecse-324")
 def getProf(courseCode, season):
+
     season = season.strip().lower().capitalize()
     courseCode = courseCode.lower().replace(" ", "-")
 
@@ -17,7 +18,7 @@ def getProf(courseCode, season):
     pattern = r"([\w\s',;]+)\((Fall|Winter)\)"
     matches = re.findall(pattern, str(elements))
 
-    instructorDict = {}
+    instructorDict = {"Fall": [], "Winter": []}
 
     for instructors, semester in matches:
         instructorList = instructors.split(";")
@@ -127,6 +128,30 @@ def convertNumberToGrade(number):
     else:
         raise ValueError("Invalid number entered")
 
+def getComments(listOfClasses, semester):
+
+    toReturn = []
+
+    for aClass in listOfClasses:
+
+        commentList = []
+
+        profList = getProf(aClass, semester)
+
+        aClass = aClass.upper().replace("-", "")
+
+        if len(profList) >= 1:
+            for prof in profList:
+                infoList = getProfInfo(getProfId(prof))
+                for infoDict in infoList:
+                    if infoDict.get("course") == aClass:
+                        commentList.append(infoDict.get("comment"))
+        else:
+            commentList.append("There is no comment on this prof for this course.")
+
+        toReturn.append(commentList)
+
+    return toReturn
 
 def getAverageForClass(className):
     jsonfile = open("./data/averages.json")
@@ -155,8 +180,6 @@ def getCreditsForClass(className):
     return classes[processedName][-1]["credits"]
 
 
-
-# Tingyi's Code
 
 # The higher the rating, the harder the class
 def getClassRating(credit, pastAverage, classDifficulty, profRating):
@@ -215,8 +238,6 @@ def getListOfClasses(userInput):
     return classes
 
 
-#Ends here
-
 
 if __name__ == "__main__":
     avg = getClassRating(3, 3, 3, 3)
@@ -225,3 +246,4 @@ if __name__ == "__main__":
     # print(class2)
     print(getSemesterRating([50,50,50,50, 20],13))
     # print(getSemesterRating([class1,avg,avg,avg,avg, class2],16))
+    print(getComments(["ecse-324", "ecse-325", "ecse-206", "ecse-250"], "Fall"))
