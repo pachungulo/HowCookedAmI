@@ -239,8 +239,47 @@ def getListOfClasses(userInput):
         classes[i] = classes[i].strip().lower().replace(" ", "-")
     return classes
 
-def getOverallDifficulty(course, profinfo):
-    return getClassRating(getCreditsForClass(course), getAverageForClass(course)[0],3.0, 3.0)  # NEED TO IMPLEMENT LAST 2 ARGS SOON TODO
+def getClassDifficulty(course, season):
+
+    classDifficulty = 0
+    count = 1
+
+    profList = getProf(course, season)
+
+    course = course.upper().replace("-", "")
+
+    if len(profList) >= 1:
+        for prof in profList:
+            infoList = getProfInfo(getProfId(prof))
+            count = len(infoList)
+            for infoDict in infoList:
+                if infoDict.get("course") == course:
+                    classDifficulty += infoDict.get("difficulty")
+    return classDifficulty/count
+
+def getProfRating(course, season):
+
+    profRating = 0
+    count = 1
+
+    profList = getProf(course, season)
+
+    course = course.upper().replace("-", "")
+
+    if len(profList) >= 1:
+        for prof in profList:
+            infoList = getProfInfo(getProfId(prof))
+            count = len(infoList)
+            for infoDict in infoList:
+                if infoDict.get("course") == course:
+                    profRating += infoDict.get("quality")
+    return profRating/count
+
+def getOverallDifficulty(course, selected_semester):
+    return getClassRating(getCreditsForClass(course),
+                          getAverageForClass(course)[0],
+                          getClassDifficulty(course, selected_semester),
+                          getProfRating(course, selected_semester))
 
 def processUserInput(userInput):
     courses = []
