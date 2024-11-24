@@ -1,7 +1,5 @@
-# Codejam 14 project
+# How Cooked Am I?
 
-Hello! Welcome to our codejam 14 project!
+Hello! Welcome to our codejam 14 project: How Cooked Am I?
 
-The requirements document can be viewed [here](https://docs.google.com/document/d/1r8H5r9Y-YBwhZ-GyhYVYvCR7cd_TWQkyO5QLyOb_5Y4/edit?usp=sharing).
-
-Have fun everyone!
+Do note that you need an OpenAI API key to use this project. Insert it as a .env file in the root of the repository as `OPENAI_API_KEY="key"`.
