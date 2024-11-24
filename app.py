@@ -12,6 +12,7 @@ def submit():
     if request.method == 'POST':
         
         # userInput = request.form['coursesInput']
+        # selected_semester = request.form.get('semester') #fall or winter
         # userInput = processing.getListOfClasses(userInput)
         # courses = []
         # for course in userInput:
