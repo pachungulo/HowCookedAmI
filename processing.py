@@ -1,3 +1,4 @@
+from functools import lru_cache
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -237,6 +238,7 @@ def getListOfClasses(userInput):
         classes[i] = classes[i].strip().lower().replace(" ", "-")
     return classes
 
+@lru_cache
 def getClassDifficulty(course, season):
 
     classDifficulty = 0
@@ -257,6 +259,7 @@ def getClassDifficulty(course, season):
                     classDifficulty += infoDict.get("difficulty")
     return classDifficulty/count
 
+@lru_cache
 def getProfRating(course, season):
 
     profRating = 0
@@ -277,11 +280,22 @@ def getProfRating(course, season):
                     profRating += infoDict.get("quality")
     return profRating/count
 
-def getOverallDifficulty(course, selected_semester):
+def passCourseRating(course, selected_semester):
     return getClassRating(getCreditsForClass(course),
                           getAverageForClass(course)[0],
                           getClassDifficulty(course, selected_semester),
                           getProfRating(course, selected_semester))
+
+def passSemesterRating(courseRatings, userInput):
+
+    totalCredit = 0
+    classRatings = []
+    for course in userInput:
+        classRatings.append(getClassRating())
+        totalCredit += getCreditsForClass(course)
+
+    return getSemesterRating(courseRatings, totalCredit)
+
 
 def processUserInput(userInput, selected_semester):
     courses = []
@@ -290,11 +304,10 @@ def processUserInput(userInput, selected_semester):
         prof = getProf(course, selected_semester)  # To make dynamic later
         if not prof:
             prof = ['N/A']
-        profinfo = getProfInfo(getProfId(prof[0]))
         tmp = {
             "code": course.upper().replace("-", " "),
             "professor": prof,
-            "overallDifficulty": getOverallDifficulty(course, selected_semester),
+            "overallDifficulty": passCourseRating(course, selected_semester),
             "comments": "TODO"
         }
         
